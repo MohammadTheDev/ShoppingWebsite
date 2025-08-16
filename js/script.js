@@ -77,3 +77,34 @@ const scrollReveal = function () {
 scrollReveal();
 
 addEventOnElem(window, "scroll", scrollReveal);
+
+let cart = [];
+let cartCountElem = document.querySelector('.header-action-btn[aria-label="cart item"] .btn-badge');
+let cartTotalElem = document.querySelector('.header-action-btn[aria-label="cart item"] data');
+
+function updateCartUI() {
+  cartCountElem.textContent = cart.length;
+
+  let total = cart.reduce((sum, item) => sum + item.price, 0);
+  cartTotalElem.textContent = `$${total.toFixed(2)}`;
+}
+
+const addToCartBtns = document.querySelectorAll('.action-btn[aria-label="add to cart"]');
+
+addToCartBtns.forEach((btn) => {
+  btn.addEventListener("click", function () {
+    const productCard = btn.closest(".shop-card");
+
+    const title = productCard.querySelector(".card-title").textContent;
+    const priceText = productCard.querySelector(".price .span").textContent.replace("$", "");
+    const price = parseFloat(priceText);
+
+    const product = { title, price };
+
+    cart.push(product);
+
+    updateCartUI();
+
+    console.log("Added to cart:", product);
+  });
+});
